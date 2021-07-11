@@ -23,6 +23,12 @@ public class DDSLoader
         return fromDDS(_ddsFile, _mipmaps,true,false);
     }
 
+    @SneakyThrows
+    public static final TextureData fromDDS(FileHandle _ddsFile, boolean _mipmaps, boolean _alpha)
+    {
+        return fromDDS(_ddsFile, _mipmaps,_alpha,false);
+    }
+
     public static final TextureData fromDDS(FileHandle _ddsFile, boolean _mipmaps, boolean _alpha, boolean _unDxt)
     {
         byte[] _dds = null;
