@@ -3,6 +3,7 @@ package com.github.terefang.gdx.ddsdxt.load;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.StreamUtils;
 import com.github.terefang.gdx.ddsdxt.dxt.DXT1ATextureData;
 import com.github.terefang.gdx.ddsdxt.dxt.DXT1TextureData;
 import com.github.terefang.gdx.ddsdxt.dxt.DXT3TextureData;
@@ -11,35 +12,48 @@ import com.github.terefang.gdx.ddsdxt.rgb.RGBATextureData;
 import lombok.SneakyThrows;
 
 import java.nio.ByteBuffer;
+import java.util.zip.GZIPInputStream;
 //import org.codehaus.plexus.util.IOUtil;
 
 //import java.util.zip.GZIPInputStream;
 
 public class DDSLoader
 {
+    /** Creates texturedata from a dds file.
+     * @param _ddsFile the dds file
+     * @param _mipmaps create mipmaps */
     @SneakyThrows
     public static final TextureData fromDDS(FileHandle _ddsFile, boolean _mipmaps)
     {
         return fromDDS(_ddsFile, _mipmaps,true,false);
     }
 
+    /** Creates texturedata from a dds file.
+     * @param _ddsFile the dds file
+     * @param _mipmaps create mipmaps
+     * @param _alpha use alpha in dxt1 */
     @SneakyThrows
     public static final TextureData fromDDS(FileHandle _ddsFile, boolean _mipmaps, boolean _alpha)
     {
         return fromDDS(_ddsFile, _mipmaps,_alpha,false);
     }
 
+    /** Creates texturedata from a dds file.
+     * @param _ddsFile the dds file
+     * @param _mipmaps create mipmaps
+     * @param _alpha use alpha in dxt1
+     * @param _unDxt decompress dxt */
+    @SneakyThrows
     public static final TextureData fromDDS(FileHandle _ddsFile, boolean _mipmaps, boolean _alpha, boolean _unDxt)
     {
         byte[] _dds = null;
-        /*
         if(_ddsFile.name().endsWith(".gz"))
         {
             GZIPInputStream _is = new GZIPInputStream(_ddsFile.read(8192));
-            _dds = IOUtil.toByteArray(_is, 8192);
+            _dds = StreamUtils.copyStreamToByteArray(_is);
+            StreamUtils.closeQuietly(_is);
         }
         else
-        */
         {
             _dds = _ddsFile.readBytes();
         }
