@@ -4,6 +4,7 @@ pure java code for libgdx to load and bind:
 
 * compressed DXT1/3/5 textures from DDS format files (.dds)
 * various uncompressed argb/xrgb textures from DDS format files (.dds)
+* textures from .dxtn/.dxtn.gz format files.
 
 ### TODO
 
@@ -19,6 +20,8 @@ implement more image formats from foreign engines to facilitate reuse (if that m
 ### PROBLEM AREAS
 
 * .dds dxt1 textures are not flagged for alpha -- you have to use the loader-parameter.
+* .dxtn textures -- yet another custom format, but does properly handle dxt1a 
+(use "DXTNLoader.convert" to create).
 
 ### HISTORIC
 
