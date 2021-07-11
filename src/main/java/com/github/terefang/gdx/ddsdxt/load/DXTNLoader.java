@@ -19,6 +19,15 @@ public class DXTNLoader
     public static final int TYPE_RGBA = 0x52474241;
     public static final int TYPE_DXT0 = 0x44585430;
 
+    /** Creates texturedata from a dxtn/dxtn.gz file, does not create mipmaps.
+     * @param _dxtFile the dxtn file
+     */
+    @SneakyThrows
+    public static final TextureData fromDXTN(FileHandle _dxtFile)
+    {
+        return fromDXTN(_dxtFile, false);
+    }
+
     /** Creates texturedata from a dxtn/dxtn.gz file.
      * @param _dxtFile the dxtn file
      * @param _mipmaps create mipmaps */
@@ -72,6 +81,16 @@ public class DXTNLoader
 
     public static int getHeight(byte[] buffer) {
         return (buffer[12] & 0xFF) << 24 | (buffer[13] & 0xFF) << 16 | (buffer[14] & 0xFF) << 8 | (buffer[15] & 0xFF);
+    }
+
+    /** Creates dxtn/dxtn.gz from dds file.
+     * @param _ddsFile the dds file
+     * @param _dxtFile the dxtn file
+     */
+    @SneakyThrows
+    public static final void convertDDSToDXTN(FileHandle _ddsFile, FileHandle _dxtFile)
+    {
+        convertDDSToDXTN(_ddsFile, true, _dxtFile);
     }
 
     /** Creates dxtn/dxtn.gz from dds file.

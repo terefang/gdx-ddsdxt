@@ -6,23 +6,59 @@ pure java code for libgdx to load and bind:
 * various uncompressed argb/xrgb textures from DDS format files (.dds)
 * textures from .dxtn/.dxtn.gz format files.
 
+### Quick Usage
+
+#### Conversion
+
+Convert DDS/DXT1 to DXTN format
+```
+DXTNLoader.convertDDSToDXTN(Gdx.files.local("test_dxt1.dds"), false, 
+    Gdx.files.local("test_1.dxtn"));
+```
+
+Convert DDS/DXT1A to DXTN format
+```
+DXTNLoader.convertDDSToDXTN(Gdx.files.local("test_dxt1a.dds"), true, 
+    Gdx.files.local("test_1a.dxtn"));
+```
+
+Convert DDS/DXT3/5 to DXTN format
+```
+DXTNLoader.convertDDSToDXTN(Gdx.files.local("test_dxt3.dds"), 
+    Gdx.files.local("test_3.dxtn"));
+DXTNLoader.convertDDSToDXTN(Gdx.files.local("test_dxt5.dds"), 
+    Gdx.files.local("test_5.dxtn"));
+```
+
+#### Loading
+
+load DDS as Texture
+```
+this.texture = new Texture(DDSLoader.fromDDS(Gdx.files.local("test_1.dds")));
+```
+
+load DXTN as Texture
+```
+this.texture = new Texture(DXTNLoader.fromDXTN(Gdx.files.local("test_5.dxtn")));
+```
+
 ### TODO
 
 implement more image formats from foreign engines to facilitate reuse (if that makes sense).
 
 * .vtf -- Source Texture -- https://developer.valvesoftware.com/wiki/Valve_Texture_Format
 
-### DO NOTS
+### DONTS
 
 * .tga -- shitty legacy format -- use png/jpg/dds
 * .bmp -- yet another legacy format -- use png/jpg/dds
 
-### PROBLEM AREAS
+### Problem Areas
 
 * .dds dxt1 textures are not flagged for alpha -- you have to use the loader-parameter.
 * .dxtn textures -- yet another custom format, but does properly handle dxt1a 
 (use "DXTNLoader.convert" to create).
 
-### HISTORIC
+### Historic
 
 * Neverwinter Nights Aurora Engine -- BioDDS Format, pre-cursor to MS-DDS -- https://nwn.wiki/display/NWN1/DDS
