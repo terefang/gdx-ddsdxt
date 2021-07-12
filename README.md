@@ -44,10 +44,12 @@ this.texture = new Texture(DXTNLoader.fromDXTN(Gdx.files.local("test_5.dxtn")));
 
 Asset-Manager
 ```
-AssetMeneger.setLoader(DxtnTexture.class, new DxtnTextureLoader());
-AssetMeneger.load("test_5.dxtn", DxtnTexture.class);
+AssetMeneger.setLoader(Texture.class, new DxtnTextureLoader());
+AssetMeneger.load("test_5.dxtn", Texture.class);
 this.texture = AssetMeneger.get("test_5.dxtn");
 ```
+
+DxtnTextureLoader will delegate to stock libgdx for unrecognized extensions.
 
 ### TODO
 
