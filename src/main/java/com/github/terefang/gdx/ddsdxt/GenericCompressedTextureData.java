@@ -1,17 +1,13 @@
 package com.github.terefang.gdx.ddsdxt;
 
-import com.github.terefang.gdx.ddsdxt.dxt.DXT1TextureData;
-import com.github.terefang.gdx.ddsdxt.dxt.DXT3TextureData;
-import com.github.terefang.gdx.ddsdxt.dxt.DXT5TextureData;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import java.nio.ByteBuffer;
 
-public class GenericCompressedTextureData implements TextureData
+public class GenericCompressedTextureData extends GenericTextureData implements TextureData
 {
     // GL_EXT_texture_compression_dxt1
     public static final int COMPRESSED_RGB_S3TC_DXT1_EXT                      =0x83F0;
@@ -31,33 +27,6 @@ public class GenericCompressedTextureData implements TextureData
     protected Pixmap.Format pixmapFormat;
     protected int glTextureFormat;
     protected String glTextureCompressionExtension;
-
-    @Override
-    public TextureDataType getType() {
-        return TextureDataType.Custom;
-    }
-
-    @Override
-    public boolean isPrepared() {
-        return this.isPrepared;
-    }
-
-    @Override
-    public void prepare() {
-        if (isPrepared) throw new GdxRuntimeException("Already prepared");
-        this.data.position(dataOffset);
-        isPrepared = true;
-    }
-
-    @Override
-    public Pixmap consumePixmap () {
-        throw new GdxRuntimeException("This TextureData implementation does not return a Pixmap");
-    }
-
-    @Override
-    public boolean disposePixmap () {
-        throw new GdxRuntimeException("This TextureData implementation does not return a Pixmap");
-    }
 
     @Override
     public void consumeCustomData(int _target)
@@ -80,26 +49,6 @@ public class GenericCompressedTextureData implements TextureData
         if (this.useMipMaps()) Gdx.gl.glGenerateMipmap(GL20.GL_TEXTURE_2D);
 
         this.isPrepared = false;
-    }
-
-    @Override
-    public int getWidth() {
-        return this.width;
-    }
-
-    @Override
-    public int getHeight() {
-        return this.height;
-    }
-
-    @Override
-    public Pixmap.Format getFormat() {
-        return this.pixmapFormat;
-    }
-
-    @Override
-    public boolean useMipMaps() {
-        return this.useMipMaps;
     }
 
     @Override
