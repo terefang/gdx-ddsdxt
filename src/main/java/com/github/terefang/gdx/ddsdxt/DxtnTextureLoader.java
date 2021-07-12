@@ -11,6 +11,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.utils.Array;
+
 import com.github.terefang.gdx.ddsdxt.load.DDSLoader;
 import com.github.terefang.gdx.ddsdxt.load.DXTNLoader;
 
@@ -20,7 +21,7 @@ import com.github.terefang.gdx.ddsdxt.load.DXTNLoader;
  * various Texture constructors, e.g. filtering, whether to generate mipmaps and so on.
  */
 public class DxtnTextureLoader
-extends AsynchronousAssetLoader<Texture,TextureLoader.TextureParameter>
+extends AsynchronousAssetLoader<DxtnTexture,DxtnTextureLoader.TextureParameter>
 {
     static public class TextureLoaderInfo {
         public String filename;
@@ -35,7 +36,7 @@ extends AsynchronousAssetLoader<Texture,TextureLoader.TextureParameter>
     }
 
     @Override
-    public void loadAsync(AssetManager manager, String fileName, FileHandle file, TextureLoader.TextureParameter parameter) {
+    public void loadAsync(AssetManager manager, String fileName, FileHandle file, DxtnTextureLoader.TextureParameter parameter) {
         info.filename = fileName;
         boolean genMipMaps = false;
         if (parameter != null) {
@@ -56,7 +57,7 @@ extends AsynchronousAssetLoader<Texture,TextureLoader.TextureParameter>
     }
 
     @Override
-    public DxtnTexture loadSync(AssetManager manager, String fileName, FileHandle file, TextureLoader.TextureParameter parameter) {
+    public DxtnTexture loadSync(AssetManager manager, String fileName, FileHandle file, DxtnTextureLoader.TextureParameter parameter) {
         if (info == null) return null;
         DxtnTexture texture = info.texture;
         if (texture != null) {
@@ -72,7 +73,20 @@ extends AsynchronousAssetLoader<Texture,TextureLoader.TextureParameter>
     }
 
     @Override
-    public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, TextureLoader.TextureParameter parameter) {
+    public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, DxtnTextureLoader.TextureParameter parameter) {
         return null;
+    }
+
+    static public class TextureParameter extends AssetLoaderParameters<DxtnTexture> {
+        /** whether to generate mipmaps **/
+        public boolean genMipMaps = false;
+        /** The texture to put the {@link TextureData} in, optional. **/
+        public DxtnTexture texture = null;
+        /** TextureData for textures created on the fly, optional. When set, all format and genMipMaps are ignored */
+        public TextureData textureData = null;
+        public Texture.TextureFilter minFilter = Texture.TextureFilter.Nearest;
+        public Texture.TextureFilter magFilter = Texture.TextureFilter.Nearest;
+        public Texture.TextureWrap wrapU = Texture.TextureWrap.ClampToEdge;
+        public Texture.TextureWrap wrapV = Texture.TextureWrap.ClampToEdge;
     }
 }

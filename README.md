@@ -42,6 +42,13 @@ load DXTN as Texture
 this.texture = new Texture(DXTNLoader.fromDXTN(Gdx.files.local("test_5.dxtn")));
 ```
 
+Asset-Manager
+```
+AssetMeneger.setLoader(DxtnTexture.class, new DxtnTextureLoader());
+AssetMeneger.load("test_5.dxtn", DxtnTexture.class);
+this.texture = AssetMeneger.get("test_5.dxtn");
+```
+
 ### TODO
 
 implement more image formats from foreign engines to facilitate reuse (if that makes sense).
