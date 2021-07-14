@@ -18,20 +18,13 @@ public class GenericCompressedTextureData extends GenericTextureData implements 
     public static final int COMPRESSED_RGBA_S3TC_DXT3_EXT                  =0x83F2;
     public static final int COMPRESSED_RGBA_S3TC_DXT5_EXT                  =0x83F3;
 
-    protected ByteBuffer data;
-    protected int dataOffset;
-    protected boolean isPrepared = false;
-    protected int width;
-    protected int height;
-    protected boolean useMipMaps = false;
-    protected Pixmap.Format pixmapFormat;
     protected int glTextureFormat;
     protected String glTextureCompressionExtension;
 
     @Override
     public void consumeCustomData(int _target)
     {
-        if (!this.isPrepared) throw new GdxRuntimeException("Call prepare() before calling consumeCompressedData()");
+        if (!this.prepared) throw new GdxRuntimeException("Call prepare() before calling consumeCompressedData()");
 
         if (this.glTextureCompressionExtension!=null)
         {
@@ -48,7 +41,7 @@ public class GenericCompressedTextureData extends GenericTextureData implements 
 
         if (this.useMipMaps()) Gdx.gl.glGenerateMipmap(GL20.GL_TEXTURE_2D);
 
-        this.isPrepared = false;
+        this.prepared = false;
     }
 
     @Override

@@ -27,6 +27,9 @@ public class RGBATextureData extends GenericTextureData
         this.glTextureType = GL20.GL_UNSIGNED_BYTE;
         this.useMipMaps = _mipmaps;
         this.pixmapFormat = Pixmap.Format.RGBA8888;
+
+        this.data.position(_offset);
+        this.prepared = true;
     }
 
     public static TextureData from(Gdx2DPixmap _img, boolean _mipmaps)
@@ -46,6 +49,9 @@ public class RGBATextureData extends GenericTextureData
         this.glTextureType = _img.getGLType();
         this.useMipMaps = _mipmaps;
         this.pixmapFormat = Pixmap.Format.fromGdx2DPixmapFormat(_img.getFormat());
+
+        this.data.position(0);
+        this.prepared = true;
     }
 
 }

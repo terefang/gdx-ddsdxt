@@ -10,16 +10,16 @@ import java.nio.ByteBuffer;
 
 public class GenericTextureData implements TextureData
 {
-    protected ByteBuffer data;
-    protected int dataOffset;
-    protected boolean isPrepared = false;
-    protected int width;
-    protected int height;
-    protected boolean useMipMaps = false;
-    protected Pixmap.Format pixmapFormat;
-    protected int glTextureFormat;
-    protected int glTextureType;
-    protected int glInternalTextureFormat;
+    public ByteBuffer data;
+    public int dataOffset;
+    public boolean prepared = false;
+    public int width;
+    public int height;
+    public boolean useMipMaps = false;
+    public Pixmap.Format pixmapFormat;
+    public int glTextureFormat;
+    public int glTextureType;
+    public int glInternalTextureFormat;
 
     @Override
     public TextureDataType getType() {
@@ -28,14 +28,14 @@ public class GenericTextureData implements TextureData
 
     @Override
     public boolean isPrepared() {
-        return this.isPrepared;
+        return this.prepared;
     }
 
     @Override
     public void prepare() {
-        if (isPrepared) throw new GdxRuntimeException("Already prepared");
+        if (this.prepared) throw new GdxRuntimeException("Already prepared");
         this.data.position(dataOffset);
-        isPrepared = true;
+        this.prepared = true;
     }
 
     @Override
@@ -51,13 +51,13 @@ public class GenericTextureData implements TextureData
     @Override
     public void consumeCustomData(int _target)
     {
-        if (!this.isPrepared) throw new GdxRuntimeException("Call prepare() before calling consumeCompressedData()");
+        if (!this.prepared) throw new GdxRuntimeException("Call prepare() before calling consumeCompressedData()");
 
         Gdx.gl.glTexImage2D(_target, 0, this.glInternalTextureFormat, this.width, this.height, 0, this.glTextureFormat, this.glTextureType, this.data);
 
         if (this.useMipMaps()) Gdx.gl.glGenerateMipmap(GL20.GL_TEXTURE_2D);
 
-        this.isPrepared = false;
+        this.prepared = false;
     }
 
     @Override

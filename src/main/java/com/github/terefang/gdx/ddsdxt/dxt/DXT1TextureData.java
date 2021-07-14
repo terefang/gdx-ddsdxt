@@ -22,5 +22,7 @@ public class DXT1TextureData extends GenericCompressedTextureData
         this.glTextureFormat = COMPRESSED_RGB_S3TC_DXT1_EXT;
         this.useMipMaps = _mipmaps;
         this.pixmapFormat = Pixmap.Format.RGB565;
+        this.data.position(_offset);
+        this.prepared = true;
     }
 }
