@@ -11,7 +11,6 @@ import com.github.terefang.gdx.ddsdxt.GenericTextureDataLoader;
 import com.github.terefang.gdx.ddsdxt.GenericTextureDataLoaderFactory;
 import com.github.terefang.gdx.ddsdxt.load.DDSLoader;
 import com.github.terefang.gdx.ddsdxt.load.DXTNLoader;
-import jdk.jfr.events.FileForceEvent;
 
 /** {@link AssetLoader} for {@link Texture} instances. The pixel data is loaded asynchronously. The texture is then created on the
  * rendering thread, synchronously. Passing a {@link TextureLoader.TextureParameter} to
