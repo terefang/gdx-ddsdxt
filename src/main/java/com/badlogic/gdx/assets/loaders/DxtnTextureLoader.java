@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.loaders.resolvers.AbsoluteFileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 
+import com.badlogic.gdx.graphics.TextureData;
 import com.github.terefang.gdx.ddsdxt.GenericTextureDataLoader;
 import com.github.terefang.gdx.ddsdxt.GenericTextureDataLoaderFactory;
 import com.github.terefang.gdx.ddsdxt.load.DDSLoader;
@@ -46,57 +47,42 @@ extends TextureLoader
 
     @Override
     public void loadAsync(AssetManager manager, String fileName, FileHandle file, TextureLoader.TextureParameter parameter) {
-        info.filename = fileName;
+    }
+
+    @Override
+    public Texture loadSync (AssetManager manager, String fileName, FileHandle file, TextureParameter parameter) {
         boolean genMipMaps = false;
         if (parameter != null) {
             genMipMaps = parameter.genMipMaps;
         }
 
+        TextureData _textureData = null;
         if(this.useServiceLoader)
         {
             GenericTextureDataLoader _loader = GenericTextureDataLoaderFactory.findLoader(fileName, file);
             if(_loader!=null)
             {
-                info.data = _loader.load(fileName, file, parameter);
-            }
-            else
-            {
-                super.loadAsync(manager, fileName, file,parameter);
-                return;
+                _textureData = _loader.load(fileName, file, parameter);
             }
         }
         else
         if(fileName.endsWith(".dds") || fileName.endsWith(".dds.gz"))
         {
-            info.data = DDSLoader.fromDDS(file, genMipMaps);
+            _textureData = DDSLoader.fromDDS(file, genMipMaps);
         }
         else
         if(fileName.endsWith(".dxtn") || fileName.endsWith(".dxtn.gz"))
         {
-            info.data = DXTNLoader.fromDXTN(file, genMipMaps);
-        }
-        else
-        {
-            super.loadAsync(manager, fileName, file,parameter);
-            return;
+            _textureData = DXTNLoader.fromDXTN(file, genMipMaps);
         }
 
-    }
+        if(_textureData==null) return null;
 
-    @Override
-    public Texture loadSync (AssetManager manager, String fileName, FileHandle file, TextureParameter parameter) {
-        if (info == null) return null;
-        if (!info.data.isPrepared()) info.data.prepare();
-        Texture texture = info.texture;
-        if (texture != null) {
-            texture.load(info.data);
-        } else {
-            texture = new Texture(info.data);
-        }
+        Texture _texture = new Texture(_textureData);
         if (parameter != null) {
-            texture.setFilter(parameter.minFilter, parameter.magFilter);
-            texture.setWrap(parameter.wrapU, parameter.wrapV);
+            _texture.setFilter(parameter.minFilter, parameter.magFilter);
+            _texture.setWrap(parameter.wrapU, parameter.wrapV);
         }
-        return texture;
+        return _texture;
     }
 }

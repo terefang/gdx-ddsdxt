@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.github.terefang.gdx.ddsdxt.load.DDSLoader;
 import com.github.terefang.gdx.ddsdxt.load.DXTNLoader;
 import lombok.SneakyThrows;
 
@@ -33,6 +32,7 @@ public class TestImages implements ApplicationListener {
         this.batch = new SpriteBatch();
         this.texture = new Texture(DXTNLoader.fromDXTN(Gdx.files.local("src/test/resources/ruby.dxtn.gz")));
         this.sprite = new Sprite(texture);
+
     }
 
     @Override

@@ -25,7 +25,7 @@ public class DDSLoader
     @SneakyThrows
     public static final TextureData fromDDS(FileHandle _ddsFile)
     {
-        return fromDDS(_ddsFile, false,true,false);
+        return fromDDS(_ddsFile, false,true,false, false);
     }
 
     /** Creates texturedata from a dds file.
@@ -34,7 +34,7 @@ public class DDSLoader
     @SneakyThrows
     public static final TextureData fromDDS(FileHandle _ddsFile, boolean _mipmaps)
     {
-        return fromDDS(_ddsFile, _mipmaps,true,false);
+        return fromDDS(_ddsFile, _mipmaps,true,false, false);
     }
 
     /** Creates texturedata from a dds file.
@@ -44,7 +44,7 @@ public class DDSLoader
     @SneakyThrows
     public static final TextureData fromDDS(FileHandle _ddsFile, boolean _mipmaps, boolean _alpha)
     {
-        return fromDDS(_ddsFile, _mipmaps,_alpha,false);
+        return fromDDS(_ddsFile, _mipmaps,_alpha,false, false);
     }
 
     /** Creates texturedata from a dds file.
@@ -54,6 +54,17 @@ public class DDSLoader
      * @param _unDxt decompress dxt */
     @SneakyThrows
     public static final TextureData fromDDS(FileHandle _ddsFile, boolean _mipmaps, boolean _alpha, boolean _unDxt)
+    {
+        return fromDDS(_ddsFile, _mipmaps,_alpha, _unDxt, false);
+    }
+
+    /** Creates texturedata from a dds file.
+     * @param _ddsFile the dds file
+     * @param _mipmaps create mipmaps
+     * @param _alpha use alpha in dxt1
+     * @param _unDxt decompress dxt */
+    @SneakyThrows
+    public static final TextureData fromDDS(FileHandle _ddsFile, boolean _mipmaps, boolean _alpha, boolean _unDxt, boolean _f32)
     {
         byte[] _dds = null;
         if(_ddsFile.name().endsWith(".gz"))

@@ -18,6 +18,7 @@ public class DXTNLoader
 {
     public static final int TYPE_RGBA = 0x52474241;
     public static final int TYPE_DXT0 = 0x44585430;
+    public static final int TYPE_DX10 = 0x44583130;
 
     /** Creates texturedata from a dxtn/dxtn.gz file, does not create mipmaps.
      * @param _dxtFile the dxtn file
@@ -47,6 +48,31 @@ public class DXTNLoader
         }
 
         int _type = getFourCC(_dxt);
+        int _flags = getPixelFormatFlags(_dxt);
+
+        // remap dx10 types
+        if(_type==TYPE_DX10)
+        {
+            switch(_flags & 0xff)
+            {
+                case DDS.DXGI_FORMAT_BC1_TYPELESS:
+                case DDS.DXGI_FORMAT_BC1_UNORM:
+                case DDS.DXGI_FORMAT_BC1_UNORM_SRGB:
+                    _type = DDS.DXT1;
+                    break;
+                case DDS.DXGI_FORMAT_BC2_TYPELESS:
+                case DDS.DXGI_FORMAT_BC2_UNORM:
+                case DDS.DXGI_FORMAT_BC2_UNORM_SRGB:
+                    _type = DDS.DXT3;
+                    break;
+                case DDS.DXGI_FORMAT_BC3_TYPELESS:
+                case DDS.DXGI_FORMAT_BC3_UNORM:
+                case DDS.DXGI_FORMAT_BC3_UNORM_SRGB:
+                    _type = DDS.DXT5;
+                    break;
+            }
+        }
+
         ByteBuffer _buf = BufferUtils.newUnsafeByteBuffer(_dxt.length-16);
         _buf.put(_dxt, 16, _dxt.length-16);
         _buf.position(0);
@@ -62,6 +88,12 @@ public class DXTNLoader
                 return DXT5TextureData.from(_buf, 0, getWidth(_dxt), getHeight(_dxt), _mipmaps);
             case TYPE_RGBA:
                 return RGBATextureData.from(_buf, 0, getWidth(_dxt), getHeight(_dxt), _mipmaps);
+            case TYPE_DX10:
+                switch (_flags & 0xff)
+                {
+                    default:
+                        throw new GdxRuntimeException("Unsupported DXTN/DX10 Texture");
+                }
             default:
                 throw new GdxRuntimeException("Unsupported DXTN Texture");
         }
@@ -112,6 +144,7 @@ public class DXTNLoader
                 break;
             case DDS.DXT3:
             case DDS.DXT5:
+            case DDS.DX10:
                 _dos.writeInt(_type);
                 break;
             case DDS.A1R5G5B5:
@@ -130,7 +163,17 @@ public class DXTNLoader
                 throw new GdxRuntimeException("Unsupported DDS Texture");
         }
 
-        _dos.writeInt(DDS.getPixelFormatFlags(_dds));
+        if(_type==DDS.DX10)
+        {
+            _dos.writeInt((DDS.getDx10DxgiFormat(_dds)&0xff)
+                    | ((DDS.getDx10ResourceDimension(_dds)&0xff)<<8)
+                    | ((DDS.getDx10MiscFlag(_dds)&0xff)<<16)
+                    | ((DDS.getDx10MiscFlags2(_dds)&0xff)<<24));
+        }
+        else
+        {
+            _dos.writeInt(DDS.getPixelFormatFlags(_dds));
+        }
         _dos.writeInt(DDS.getWidth(_dds));
         _dos.writeInt(DDS.getHeight(_dds));
 
