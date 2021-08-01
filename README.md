@@ -9,6 +9,27 @@ pure java code for libgdx to load and bind:
 
 ### Quick Usage
 
+**Maven Repository**
+
+```xml
+<pluginRepositories>
+    <pluginRepository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </pluginRepository>
+</pluginRepositories>
+```
+
+**Maven Dependency**
+
+```xml
+<dependency>
+  <groupId>com.github.terefang</groupId>
+  <artifactId>gdx-ddsdxt</artifactId>
+  <version>2021.2</version>
+</dependency>
+```
+
 #### Conversion
 
 Convert DDS/DXT1 to DXTN format
