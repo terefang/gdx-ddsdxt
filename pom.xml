@@ -6,7 +6,7 @@
 
     <groupId>com.github.terefang</groupId>
     <artifactId>gdx-ddsdxt</artifactId>
-    <version>2021.3</version>
+    <version>2021.4</version>
 
     <build>
         <plugins>

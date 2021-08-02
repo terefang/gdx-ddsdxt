@@ -3,7 +3,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.DxtnTextureLoader;
+import com.github.terefang.gdx.ddsdxt.assets.DxtnTextureAssetLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.LocalFileHandleResolver;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
@@ -32,7 +32,7 @@ public class TestImagesAsset implements ApplicationListener {
         //this.hudCam = new OrthographicCamera();
         this.batch = new SpriteBatch();
         this.assetManager = new AssetManager(new LocalFileHandleResolver());
-        DxtnTextureLoader.register(this.assetManager, this.assetManager.getFileHandleResolver());
+        DxtnTextureAssetLoader.register(this.assetManager, this.assetManager.getFileHandleResolver());
         //this.texture = new Texture(DDSLoader.fromDDS(Gdx.files.local("src/test/resources/ruby_dxt1a.8.dds"), false, true, false));
         this.assetManager.load("src/test/resources/ruby.dxtn.gz", Texture.class);
         this.assetManager.finishLoading();

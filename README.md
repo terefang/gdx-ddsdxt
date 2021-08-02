@@ -26,7 +26,7 @@ pure java code for libgdx to load and bind:
 <dependency>
   <groupId>com.github.terefang</groupId>
   <artifactId>gdx-ddsdxt</artifactId>
-  <version>2021.2</version>
+  <version>VERSION</version>
 </dependency>
 ```
 
