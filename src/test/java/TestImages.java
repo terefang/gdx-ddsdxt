@@ -27,7 +27,7 @@ public class TestImages implements ApplicationListener {
                 Gdx.files.local("src/test/resources/ruby.dxtn.gz"));
         //this.hudCam = new OrthographicCamera();
         this.batch = new SpriteBatch();
-        this.texture = new Texture(DXTNLoader.fromDXTN(Gdx.files.local("src/test/resources/ruby.dxtn.gz")));
+        this.texture = new Texture(DXTNLoader.fromDxtnToTexture(Gdx.files.local("src/test/resources/ruby.dxtn.gz")));
         this.sprite = new Sprite(texture);
 
     }

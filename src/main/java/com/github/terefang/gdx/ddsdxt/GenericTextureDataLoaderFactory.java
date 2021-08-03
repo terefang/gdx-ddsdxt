@@ -14,7 +14,7 @@ public interface GenericTextureDataLoaderFactory
         while(_it.hasNext())
         {
             GenericTextureDataLoaderFactory _impl = _it.next();
-            if(_impl.canLoad(_fileName,_file))
+            if(_impl.canLoadTexture(_fileName,_file))
             {
                 return _impl.getInstance();
             }
@@ -22,7 +22,7 @@ public interface GenericTextureDataLoaderFactory
         return null;
     }
 
-    public boolean canLoad(String _fileName, FileHandle _file);
+    public boolean canLoadTexture(String _fileName, FileHandle _file);
 
     public GenericTextureDataLoader getInstance();
 }

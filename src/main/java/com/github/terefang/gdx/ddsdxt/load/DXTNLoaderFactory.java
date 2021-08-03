@@ -8,7 +8,7 @@ import com.github.terefang.gdx.ddsdxt.GenericTextureDataLoaderFactory;
 
 public class DXTNLoaderFactory implements GenericTextureDataLoaderFactory, GenericTextureDataLoader {
     @Override
-    public boolean canLoad(String _fileName, FileHandle _file) {
+    public boolean canLoadTexture(String _fileName, FileHandle _file) {
         return _fileName.endsWith(".dxtn") || _fileName.endsWith(".dxtn.gz");
     }
 
@@ -18,8 +18,8 @@ public class DXTNLoaderFactory implements GenericTextureDataLoaderFactory, Gener
     }
 
     @Override
-    public TextureData load(String _fileName, FileHandle _file, TextureLoader.TextureParameter _param)
+    public TextureData loadTexture(String _fileName, FileHandle _file, TextureLoader.TextureParameter _param)
     {
-        return DXTNLoader.fromDXTN(_file, _param==null ? false : _param.genMipMaps);
+        return DXTNLoader.fromDxtnToTexture(_file, _param==null ? false : _param.genMipMaps);
     }
 }

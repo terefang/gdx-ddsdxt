@@ -1,7 +1,9 @@
 package com.github.terefang.gdx.ddsdxt.load;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.TextureData;
+import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 import com.badlogic.gdx.utils.*;
 import com.github.terefang.gdx.ddsdxt.dxt.DXT1ATextureData;
 import com.github.terefang.gdx.ddsdxt.dxt.DXT1TextureData;
@@ -24,16 +26,16 @@ public class DXTNLoader
      * @param _dxtFile the dxtn file
      */
     @SneakyThrows
-    public static final TextureData fromDXTN(FileHandle _dxtFile)
+    public static final TextureData fromDxtnToTexture(FileHandle _dxtFile)
     {
-        return fromDXTN(_dxtFile, false);
+        return fromDxtnToTexture(_dxtFile, false);
     }
 
     /** Creates texturedata from a dxtn/dxtn.gz file.
      * @param _dxtFile the dxtn file
      * @param _mipmaps create mipmaps */
     @SneakyThrows
-    public static final TextureData fromDXTN(FileHandle _dxtFile, boolean _mipmaps)
+    public static final TextureData fromDxtnToTexture(FileHandle _dxtFile, boolean _mipmaps)
     {
         byte[] _dxt = null;
         if(_dxtFile.name().endsWith(".gz"))
@@ -197,4 +199,79 @@ public class DXTNLoader
         }
     }
 
+    @SneakyThrows
+    public static Pixmap fromDxtnToPixmap(String _fileName, FileHandle _dxtFile)
+    {
+        byte[] _dxt = null;
+        if(_fileName.endsWith(".gz"))
+        {
+            GZIPInputStream _is = new GZIPInputStream(_dxtFile.read(8192));
+            _dxt = StreamUtils.copyStreamToByteArray(_is);
+            StreamUtils.closeQuietly(_is);
+        }
+        else
+        {
+            _dxt = _dxtFile.readBytes();
+        }
+
+        int _type = getFourCC(_dxt);
+        int _flags = getPixelFormatFlags(_dxt);
+
+        // remap dx10 types
+        if(_type==TYPE_DX10)
+        {
+            switch(_flags & 0xff)
+            {
+                case DDS.DXGI_FORMAT_BC1_TYPELESS:
+                case DDS.DXGI_FORMAT_BC1_UNORM:
+                case DDS.DXGI_FORMAT_BC1_UNORM_SRGB:
+                    _type = DDS.DXT1;
+                    break;
+                case DDS.DXGI_FORMAT_BC2_TYPELESS:
+                case DDS.DXGI_FORMAT_BC2_UNORM:
+                case DDS.DXGI_FORMAT_BC2_UNORM_SRGB:
+                    _type = DDS.DXT3;
+                    break;
+                case DDS.DXGI_FORMAT_BC3_TYPELESS:
+                case DDS.DXGI_FORMAT_BC3_UNORM:
+                case DDS.DXGI_FORMAT_BC3_UNORM_SRGB:
+                    _type = DDS.DXT5;
+                    break;
+            }
+        }
+
+        Gdx2DPixmap _p2x = Gdx2DPixmap.newPixmap(getWidth(_dxt), getHeight(_dxt), Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
+        ByteBuffer _buf = null;
+        switch(_type)
+        {
+            case TYPE_DXT0:
+            case DDS.DXT1:
+                _buf = DDS.decodeDXT1(getWidth(_dxt), getHeight(_dxt), 16, _dxt, DDS.ORDER_ABGR);
+                _buf.position(0);
+                _p2x.getPixels().put(_buf);
+                break;
+            case DDS.DXT3:
+                _buf = DDS.decodeDXT3(getWidth(_dxt), getHeight(_dxt), 16, _dxt, DDS.ORDER_ABGR);
+                _buf.position(0);
+                _p2x.getPixels().put(_buf);
+                break;
+            case DDS.DXT5:
+                _buf = DDS.decodeDXT5(getWidth(_dxt), getHeight(_dxt), 16, _dxt, DDS.ORDER_ABGR);
+                _buf.position(0);
+                _p2x.getPixels().put(_buf);
+                break;
+            case TYPE_RGBA:
+                _p2x.getPixels().put(_dxt, 16, _dxt.length-16);
+                break;
+            case TYPE_DX10:
+                switch (_flags & 0xff)
+                {
+                    default:
+                        throw new GdxRuntimeException("Unsupported DXTN/DX10 Texture");
+                }
+            default:
+                throw new GdxRuntimeException("Unsupported DXTN Texture");
+        }
+        return new Pixmap(_p2x);
+    }
 }

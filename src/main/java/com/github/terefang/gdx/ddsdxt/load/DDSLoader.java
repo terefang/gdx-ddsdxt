@@ -1,7 +1,9 @@
 package com.github.terefang.gdx.ddsdxt.load;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.TextureData;
+import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.StreamUtils;
 
@@ -23,18 +25,18 @@ public class DDSLoader
      * @param _ddsFile the dds file
      */
     @SneakyThrows
-    public static final TextureData fromDDS(FileHandle _ddsFile)
+    public static final TextureData fromDdsToTexture(FileHandle _ddsFile)
     {
-        return fromDDS(_ddsFile, false,true,false, false);
+        return fromDdsToTexture(_ddsFile, false,true,false, false);
     }
 
     /** Creates texturedata from a dds file.
      * @param _ddsFile the dds file
      * @param _mipmaps create mipmaps */
     @SneakyThrows
-    public static final TextureData fromDDS(FileHandle _ddsFile, boolean _mipmaps)
+    public static final TextureData fromDdsToTexture(FileHandle _ddsFile, boolean _mipmaps)
     {
-        return fromDDS(_ddsFile, _mipmaps,true,false, false);
+        return fromDdsToTexture(_ddsFile, _mipmaps,true,false, false);
     }
 
     /** Creates texturedata from a dds file.
@@ -42,9 +44,9 @@ public class DDSLoader
      * @param _mipmaps create mipmaps
      * @param _alpha use alpha in dxt1 */
     @SneakyThrows
-    public static final TextureData fromDDS(FileHandle _ddsFile, boolean _mipmaps, boolean _alpha)
+    public static final TextureData fromDdsToTexture(FileHandle _ddsFile, boolean _mipmaps, boolean _alpha)
     {
-        return fromDDS(_ddsFile, _mipmaps,_alpha,false, false);
+        return fromDdsToTexture(_ddsFile, _mipmaps,_alpha,false, false);
     }
 
     /** Creates texturedata from a dds file.
@@ -53,9 +55,9 @@ public class DDSLoader
      * @param _alpha use alpha in dxt1
      * @param _unDxt decompress dxt */
     @SneakyThrows
-    public static final TextureData fromDDS(FileHandle _ddsFile, boolean _mipmaps, boolean _alpha, boolean _unDxt)
+    public static final TextureData fromDdsToTexture(FileHandle _ddsFile, boolean _mipmaps, boolean _alpha, boolean _unDxt)
     {
-        return fromDDS(_ddsFile, _mipmaps,_alpha, _unDxt, false);
+        return fromDdsToTexture(_ddsFile, _mipmaps,_alpha, _unDxt, false);
     }
 
     /** Creates texturedata from a dds file.
@@ -64,7 +66,7 @@ public class DDSLoader
      * @param _alpha use alpha in dxt1
      * @param _unDxt decompress dxt */
     @SneakyThrows
-    public static final TextureData fromDDS(FileHandle _ddsFile, boolean _mipmaps, boolean _alpha, boolean _unDxt, boolean _f32)
+    public static final TextureData fromDdsToTexture(FileHandle _ddsFile, boolean _mipmaps, boolean _alpha, boolean _unDxt, boolean _f32)
     {
         byte[] _dds = null;
         if(_ddsFile.name().endsWith(".gz"))
@@ -110,5 +112,27 @@ public class DDSLoader
             default:
                 throw new GdxRuntimeException("Unsupported DDS Texture");
         }
+    }
+
+    @SneakyThrows
+    public static Pixmap fromDdsToPixmap(String _fileName, FileHandle _ddsFile)
+    {
+        byte[] _dds = null;
+        if(_fileName.endsWith(".gz"))
+        {
+            GZIPInputStream _is = new GZIPInputStream(_ddsFile.read(8192));
+            _dds = StreamUtils.copyStreamToByteArray(_is);
+            StreamUtils.closeQuietly(_is);
+        }
+        else
+        {
+            _dds = _ddsFile.readBytes();
+        }
+
+        Gdx2DPixmap _p2x = Gdx2DPixmap.newPixmap(DDS.getWidth(_dds), DDS.getHeight(_dds), Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
+        ByteBuffer _buf = DDS.read(_dds, 0, true);
+        _buf.position(0);
+        _p2x.getPixels().put(_buf);
+        return new Pixmap(_p2x);
     }
 }

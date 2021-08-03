@@ -6,5 +6,5 @@ import com.badlogic.gdx.graphics.TextureData;
 
 public interface GenericTextureDataLoader
 {
-    public TextureData load(String _fileName, FileHandle _file, TextureLoader.TextureParameter _param);
+    public TextureData loadTexture(String _fileName, FileHandle _file, TextureLoader.TextureParameter _param);
 }

@@ -46,7 +46,6 @@ class DDS {
 
     static final int DXGI_FORMAT_UNKNOWN                                    = 0;
     /*
-
     static final int DXGI_FORMAT_R32G32B32A32_TYPELESS                      = 1;
     static final int DXGI_FORMAT_R32G32B32A32_FLOAT                         = 2;
     static final int DXGI_FORMAT_R32G32B32A32_UINT                          = 3;
@@ -73,12 +72,14 @@ class DDS {
     static final int DXGI_FORMAT_R10G10B10A2_UNORM                          = 24;
     static final int DXGI_FORMAT_R10G10B10A2_UINT                           = 25;
     static final int DXGI_FORMAT_R11G11B10_FLOAT                            = 26;
+    */
     static final int DXGI_FORMAT_R8G8B8A8_TYPELESS                          = 27;
     static final int DXGI_FORMAT_R8G8B8A8_UNORM                             = 28;
     static final int DXGI_FORMAT_R8G8B8A8_UNORM_SRGB                        = 29;
     static final int DXGI_FORMAT_R8G8B8A8_UINT                              = 30;
     static final int DXGI_FORMAT_R8G8B8A8_SNORM                             = 31;
     static final int DXGI_FORMAT_R8G8B8A8_SINT                              = 32;
+    /*
     static final int DXGI_FORMAT_R16G16_TYPELESS                            = 33;
     static final int DXGI_FORMAT_R16G16_FLOAT                               = 34;
     static final int DXGI_FORMAT_R16G16_UNORM                               = 35;
@@ -297,7 +298,14 @@ class DDS {
                     case DX10:
                         switch(_subType)
                         {
-
+                            case DXGI_FORMAT_R8G8B8A8_TYPELESS:
+                            case DXGI_FORMAT_R8G8B8A8_UNORM:
+                            case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
+                            case DXGI_FORMAT_R8G8B8A8_UINT:
+                            case DXGI_FORMAT_R8G8B8A8_SNORM:
+                            case DXGI_FORMAT_R8G8B8A8_SINT:
+                                _offset += 4 * _width * _height;
+                                break;
                             default:
                                 throw new GdxRuntimeException("Unsupported DDS/DX10 Texture");
                         }
@@ -361,6 +369,19 @@ class DDS {
                 return readA8R8G8B8(_width, _height, _offset, _buffer, ORDER_ABGR);
             case X8R8G8B8:
                 return readX8R8G8B8(_width, _height, _offset, _buffer, ORDER_ABGR);
+            case DX10:
+                switch(_subType)
+                {
+                    case DXGI_FORMAT_R8G8B8A8_TYPELESS:
+                    case DXGI_FORMAT_R8G8B8A8_UNORM:
+                    case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
+                    case DXGI_FORMAT_R8G8B8A8_UINT:
+                    case DXGI_FORMAT_R8G8B8A8_SNORM:
+                    case DXGI_FORMAT_R8G8B8A8_SINT:
+                        return readA8B8G8R8(_width, _height, _offset, _buffer, ORDER_ABGR);
+                    default:
+                        throw new GdxRuntimeException("Unsupported DDS/DX10 Texture");
+                }
             default:
                 throw new GdxRuntimeException("Unsupported DDS Texture");
         }
@@ -448,7 +469,7 @@ class DDS {
         return type;
     }
 
-     static ByteBuffer readA1R5G5B5(int width, int height, int offset, byte[] buffer, Order order) {
+    public static ByteBuffer readA1R5G5B5(int width, int height, int offset, byte[] buffer, Order order) {
         int index = offset;
         ByteBuffer pixels = BufferUtils.newUnsafeByteBuffer(width * height * 4);
         for (int i = 0; i < height * width; i++) {
@@ -463,7 +484,7 @@ class DDS {
         return pixels;
     }
 
-     static ByteBuffer readX1R5G5B5(int width, int height, int offset, byte[] buffer, Order order) {
+    public static ByteBuffer readX1R5G5B5(int width, int height, int offset, byte[] buffer, Order order) {
         int index = offset;
         ByteBuffer pixels = BufferUtils.newUnsafeByteBuffer(width * height * 4);
         for (int i = 0; i < height * width; i++) {
@@ -478,7 +499,7 @@ class DDS {
         return pixels;
     }
 
-     static ByteBuffer readA4R4G4B4(int width, int height, int offset, byte[] buffer, Order order) {
+    public static ByteBuffer readA4R4G4B4(int width, int height, int offset, byte[] buffer, Order order) {
         int index = offset;
         ByteBuffer pixels = BufferUtils.newUnsafeByteBuffer(width * height * 4);
         for (int i = 0; i < height * width; i++) {
@@ -493,7 +514,7 @@ class DDS {
         return pixels;
     }
 
-     static ByteBuffer readX4R4G4B4(int width, int height, int offset, byte[] buffer, Order order) {
+    public static ByteBuffer readX4R4G4B4(int width, int height, int offset, byte[] buffer, Order order) {
         int index = offset;
         ByteBuffer pixels = BufferUtils.newUnsafeByteBuffer(width * height * 4);
         for (int i = 0; i < height * width; i++) {
@@ -508,7 +529,7 @@ class DDS {
         return pixels;
     }
 
-     static ByteBuffer readR5G6B5(int width, int height, int offset, byte[] buffer, Order order) {
+    public static ByteBuffer readR5G6B5(int width, int height, int offset, byte[] buffer, Order order) {
         int index = offset;
         ByteBuffer pixels = BufferUtils.newUnsafeByteBuffer(width * height * 4);
         for (int i = 0; i < height * width; i++) {
@@ -523,7 +544,7 @@ class DDS {
         return pixels;
     }
 
-     static ByteBuffer readR8G8B8(int width, int height, int offset, byte[] buffer, Order order) {
+    public static ByteBuffer readR8G8B8(int width, int height, int offset, byte[] buffer, Order order) {
         int index = offset;
         ByteBuffer pixels = BufferUtils.newUnsafeByteBuffer(width * height * 4);
         for (int i = 0; i < height * width; i++) {
@@ -536,7 +557,7 @@ class DDS {
         return pixels;
     }
 
-     static ByteBuffer readA8B8G8R8(int width, int height, int offset, byte[] buffer, Order order) {
+    public static ByteBuffer readA8B8G8R8(int width, int height, int offset, byte[] buffer, Order order) {
         int index = offset;
         ByteBuffer pixels = BufferUtils.newUnsafeByteBuffer(width * height * 4);
         for (int i = 0; i < height * width; i++) {
@@ -549,7 +570,7 @@ class DDS {
         return pixels;
     }
 
-     static ByteBuffer readX8B8G8R8(int width, int height, int offset, byte[] buffer, Order order) {
+    public  static ByteBuffer readX8B8G8R8(int width, int height, int offset, byte[] buffer, Order order) {
         int index = offset;
         ByteBuffer pixels = BufferUtils.newUnsafeByteBuffer(width * height * 4);
         for (int i = 0; i < height * width; i++) {
@@ -563,7 +584,7 @@ class DDS {
         return pixels;
     }
 
-     static ByteBuffer readA8R8G8B8(int width, int height, int offset, byte[] buffer, Order order) {
+    public  static ByteBuffer readA8R8G8B8(int width, int height, int offset, byte[] buffer, Order order) {
         int index = offset;
         ByteBuffer pixels = BufferUtils.newUnsafeByteBuffer(width * height * 4);
         for (int i = 0; i < height * width; i++) {
@@ -576,7 +597,7 @@ class DDS {
         return pixels;
     }
 
-     static ByteBuffer readX8R8G8B8(int width, int height, int offset, byte[] buffer, Order order) {
+    public  static ByteBuffer readX8R8G8B8(int width, int height, int offset, byte[] buffer, Order order) {
         int index = offset;
         ByteBuffer pixels = BufferUtils.newUnsafeByteBuffer(width * height * 4);
         for (int i = 0; i < height * width; i++) {
@@ -590,7 +611,7 @@ class DDS {
         return pixels;
     }
 
-     static ByteBuffer decodeDXT1(int width, int height, int offset, byte [] buffer, Order order) {
+    public static ByteBuffer decodeDXT1(int width, int height, int offset, byte [] buffer, Order order) {
         ByteBuffer pixels = BufferUtils.newUnsafeByteBuffer(width * height * 4);
         int index = offset;
         int w = (width+3)/4;
@@ -618,7 +639,7 @@ class DDS {
         return pixels;
     }
 
-     static ByteBuffer decodeDXT3(int width, int height, int offset, byte [] buffer, Order order) {
+    public static ByteBuffer decodeDXT3(int width, int height, int offset, byte [] buffer, Order order) {
         int index = offset;
         int w = (width+3)/4;
         int h = (height+3)/4;
@@ -657,7 +678,7 @@ class DDS {
         return pixels;
     }
 
-     static ByteBuffer decodeDXT5(int width, int height, int offset, byte [] buffer, Order order) {
+    public static ByteBuffer decodeDXT5(int width, int height, int offset, byte [] buffer, Order order) {
         int index = offset;
         int w = (width+3)/4;
         int h = (height+3)/4;
