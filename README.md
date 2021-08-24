@@ -6,6 +6,7 @@ pure java code for libgdx to load and bind:
 * various uncompressed argb/xrgb textures from DDS format files (.dds)
 * textures from .dxtn/.dxtn.gz format files.
 * limited support for DDS/DX10, only DXT1A/3/5
+* support for Java ImageIO (read/write) -- .jpg .jpeg .bmp .gif .png .rle
 
 ### Quick Usage
 
