@@ -6,7 +6,7 @@
 
     <groupId>com.github.terefang</groupId>
     <artifactId>gdx-ddsdxt</artifactId>
-    <version>2021.5</version>
+    <version>2021.6</version>
 
     <build>
         <plugins>
@@ -73,6 +73,35 @@
             <artifactId>lombok</artifactId>
             <version>1.18.12</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-tiff</artifactId>
+            <version>3.6</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-psd</artifactId>
+            <version>3.6</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-bmp</artifactId>
+            <version>3.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-iff</artifactId>
+            <version>3.6</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-pnm</artifactId>
+            <version>3.6</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
